@@ -24,7 +24,7 @@ class MSzTableColumn {
 			throw new Exception('Column type is not set!');
 		}
 		if (!in_array($type, $this->getValidTypes())) {
-			throw new Exception('Column type is invalid!');
+			throw new Exception('Column type is invalid:' . $type);
 		}
 		$this -> columnId = $columnId;
 		$this -> columnTitle = $columnTitle;
@@ -46,7 +46,7 @@ class MSzTableColumn {
 		return $this->editable;
 	}
 	public function getValidTypes() {
-		return [self::STRING_TYPE, self::DATE_TYPE, self::BOOLEAN_TYPE];
+		return [self::STRING_TYPE, self::DATE_TYPE, self::BOOLEAN_TYPE, self::INTEGER_TYPE];
 	}
 } 
 
