@@ -9,18 +9,22 @@ Since it's a hobby project I'm created an own instead of using an exisitng one.
 2) Usage
 
 //create columns
+$tableHeader = array();
 $column1 = new MSzTableColumn("id1", "Test 1", MSzTableColumn::INTEGER_TYPE);
 $column2 = new MSzTableColumn("id2", "Test 2", MSzTableColumn::STRING_TYPE);
 $column3 = new MSzTableColumn("id3", "Test 1", MSzTableColumn::STRING_TYPE);
+array_push($tableHeader, $column1);
+array_push($tableHeader, $column2);
+array_push($tableHeader, $column3);
 
 //Create data
 $tableData = array(
-			array("id1" =>"3", "id2" => "apple", "id3" => "nothing"),
-			array("id1" =>"1", "id2" => "pear", "id3" => "universe")
+	array("id1" =>"3", "id2" => "apple", "id3" => "nothing"),
+	array("id1" =>"1", "id2" => "pear", "id3" => "universe")
 );
 
 /create render instance
-tr = new MSzTableRenderer([$column1, $column2, $column3], $tableData);
+tr = new MSzTableRenderer($tableHeader, $tableData);
 //render table
 $tr->doRendering();
 
