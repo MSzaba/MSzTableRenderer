@@ -31,7 +31,7 @@ class MSzTableRenderer  {
 			$types[$column->getColumnId()] = $column->getColumnType();
 		}
 		foreach ($tableData as $row) {
-			# code...
+			//TODO  validation before rendering
 		}
 		$this->tableData = $tableData;
 	}
@@ -75,7 +75,7 @@ class MSzTableRenderer  {
 		echo "<table>";
 		echo "<tr>";  
 		foreach ($this->tableHeader as $column) {
-			print_r($column);
+			
 		  	echo '<th id="'. $column->getColumnId() . '">'.$column->getColumnTitle()."</th>" ;
 		 }  
 		
@@ -87,7 +87,17 @@ class MSzTableRenderer  {
 		foreach ($this->tableData as $row) {
 			echo "<tr>"; 
 			foreach ($this->tableHeader as $column) {
-				echo "<td>". $row[$column->getColumnId()] . "</td>"; 
+				$id = $column->getColumnId();
+				$cellRenderer = $column->getRenderer();
+								
+				if ($cellRenderer->validate($row[$id])) {
+
+					echo "<td>". $cellRenderer->render($row[$id]) . "</td>"; 
+				} else {
+					echo "<td>Invalid data: " . $row[$id] . "</td>";
+				}
+				
+				
 			}
 			echo "</tr>";
 		}
