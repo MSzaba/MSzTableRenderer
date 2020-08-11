@@ -31,12 +31,13 @@ $tr->doRendering();
 3) MSzTableColumn
 
 3.1) Constructor
-ublic function __construct($columnId, $columnTitle, $type, $editable = false)
+ublic function __construct($columnId, $columnTitle, $type, $editable = false, $parameters)
 where 
 colimId:     will be set as id if the column
 columnTitle: the title of the column
 type:        Colum type. Values: STRING_TYPE, INTEGER_TYPE, DATE_TYPE, BOOLEAN_TYPE, BUTTON_TYPE (only string and integer are implemented)
 editable:    wheter the field content is editable (not yet implemented)
+parameters:  Options for rendering. see later
 
 3.2) Methods
 -getColumnId
@@ -45,6 +46,16 @@ editable:    wheter the field content is editable (not yet implemented)
 -getEditable
 -getValidTypes: Valid column types in an array for validation
 
+3.3) Parameters
+New classes are appeared in the code called cell renderers, implementations as MSzCell interface.
+They are responsible for validation and rendering the differnet type of data. They might have parameters, which can change how the data is rendered on the screen.
+For example the MSzStringCell renderer has an constant called MAX_LENGTH, which can control the maximum lenght of the rendered string.
+
+Example: 
+$parameter = [MSzStringCell::MAX_LENGTH => 30];
+$column1 = new MSzTableColumn("title", "Title, MSzTableColumn::STRING_TYPE, false, $parameter);
+
+the parameter must be an array, and if the parameters are set the "editable" function parameter must be set as well.
 
 4) MSzTableRenderer
 
