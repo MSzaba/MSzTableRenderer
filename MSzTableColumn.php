@@ -4,6 +4,7 @@ if (!defined("__ALLOW_INCLUDE__")) {
 }
 require_once(__DIR__ . "/MSzIntegerCell.php");
 require_once(__DIR__ . "/MSzStringCell.php");
+require_once(__DIR__ . "/MSzURLCell.php");
 class MSzTableColumn {
 	const STRING_TYPE = "STRING";
 	const INTEGER_TYPE = "INTEGER";
@@ -55,7 +56,7 @@ class MSzTableColumn {
 		return $this->editable;
 	}
 	public function getValidTypes() {
-		return [self::STRING_TYPE, self::DATE_TYPE, self::BOOLEAN_TYPE, self::INTEGER_TYPE];
+		return [self::STRING_TYPE, self::DATE_TYPE, self::BOOLEAN_TYPE, self::INTEGER_TYPE, self::URL_TYPE];
 	}
 
 	public function getRenderer() {
@@ -81,7 +82,7 @@ class MSzTableColumn {
 				break;
 				
 			case self::URL_TYPE:
-				//return new MSzURLCell($editable, $parameters);
+				return new MSzURLCell($editable, $parameters);
 				break;
 			
 			default:

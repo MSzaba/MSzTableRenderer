@@ -35,7 +35,7 @@ class MSzIntegerCell  implements MSzCell {
 		return isset($value) && is_integer($value);
 	}
 
-	public function render($value) {
+	public function render($value, $secondaryValue = NULL) {
 		if ($this->editable) {
 			return '<input type="text" value="' . intval($value) . '">';
 		} else {
@@ -44,6 +44,9 @@ class MSzIntegerCell  implements MSzCell {
 		}
 		
 
+	}
+	public function getSecondaryParameterId() {
+		return null;
 	}
 
 }

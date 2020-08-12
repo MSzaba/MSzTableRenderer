@@ -35,7 +35,7 @@ class MSzStringCell  implements MSzCell {
 		return isset($value) && is_string($value);
 	}
 
-	public function render($value) {
+	public function render($value, $secondaryValue = NULL) {
 		
 		if (isset($value) && strcmp($value, MSzCell::NULL) != 0) {
 			if (isset($this->parameters) && isset($this->parameters[self::MAX_LENGTH]) && $this->parameters[self::MAX_LENGTH] < strlen($value)) {
@@ -56,7 +56,9 @@ class MSzStringCell  implements MSzCell {
 		
 
 	}
-
+	public function getSecondaryParameterId() {
+		return null;
+	}
 }
 
 ?>
