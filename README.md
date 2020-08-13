@@ -35,7 +35,7 @@ ublic function __construct($columnId, $columnTitle, $type, $editable = false, $p
 where 
 colimId:     will be set as id if the column
 columnTitle: the title of the column
-type:        Colum type. Values: STRING_TYPE, INTEGER_TYPE, DATE_TYPE, BOOLEAN_TYPE, BUTTON_TYPE (only string and integer are implemented)
+type:        Colum type. Values: STRING_TYPE, INTEGER_TYPE, DATE_TYPE, BOOLEAN_TYPE, BUTTON_TYPE, URL_TYPE, IMAGE_TYPE (date and boolean are not yetimplemented)
 editable:    wheter the field content is editable (not yet implemented)
 parameters:  Options for rendering. see later
 
@@ -69,6 +69,39 @@ tableData:  array of displayed data. Every must have teh following format: ("col
 -setTableData
 -setTableHeader
 -doRendering
+
+5) Column Types and their parameters
+5.1) STRING_TYPE
+It is designed to display siple text.
+There is one parameter: 
+MSzStringCell::MAX_LENGTH - it controls the maximum allowed lenght of the printed sting.
+
+5.2) INTEGER_TYPE
+It is designed to display integer. It has no parameter
+
+5.3) URL_TYPE
+It displays an url in the trable. It uses a secondary parameter. THe main will be used as text of the link, the secondary will be used as content of the hred HTTP attribute.
+It has one parameter:
+MSzURLCell::PREFIX - this may contain an URL which will be used as prefix of the secondary parameter. 
+Usage:
+
+$tableData = array(
+	array("linkText" =>"Text1", "articleId" => "51475532"),
+	array("linkText" =>"Text2", "articleId" => "53730258")
+);
+$parameter = [MSzURLCell::PREFIX => "https://www.bbc.com/sport/football/",
+	MSzCell::SECONDARY_PARAMETER => "articleId"
+];
+$column1 = new MSzTableColumn("linkText", "Sport Articles", MSzTableColumn::URL_TYPE, false, $parameter);
+$tr = new MSzTableRenderer([$column1], $tableData);
+$tr->doRendering();
+
+5.4) IMAGE_TYPE
+This cell renderer can show an image in a cell.
+It has 3 parameters:
+MSzImageCell::HEIGHT -sets the height of the image in pixel
+MSzImageCell::WIDTH -sets the tidth of the image in pixel
+MSzImageCell::CROSSORIGIN -sets crossorigin="anonymous" parameter fro the image if it is set to true
 
 
 
