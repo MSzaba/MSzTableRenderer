@@ -6,6 +6,8 @@ require_once(__DIR__ . "/MSzIntegerCell.php");
 require_once(__DIR__ . "/MSzStringCell.php");
 require_once(__DIR__ . "/MSzURLCell.php");
 require_once(__DIR__ . "/MSzImageCell.php");
+require_once(__DIR__ . "/MSzBooleanCell.php");
+
 class MSzTableColumn {
 	const STRING_TYPE = "STRING";
 	const INTEGER_TYPE = "INTEGER";
@@ -77,8 +79,7 @@ class MSzTableColumn {
 				# code...
 				break;
 			case self::BOOLEAN_TYPE:
-				# code...
-				break;
+				return new MSzBooleanCell($editable, $parameters);
 			case self::BUTTON_TYPE:
 				# code...
 				break;
