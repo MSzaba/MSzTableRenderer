@@ -35,7 +35,7 @@ ublic function __construct($columnId, $columnTitle, $type, $editable = false, $p
 where 
 colimId:     will be set as id if the column
 columnTitle: the title of the column
-type:        Colum type. Values: STRING_TYPE, INTEGER_TYPE, DATE_TYPE, BOOLEAN_TYPE, BUTTON_TYPE, URL_TYPE, IMAGE_TYPE (date and boolean are not yetimplemented)
+type:        Colum type. Values: STRING_TYPE, INTEGER_TYPE, DATE_TYPE, BOOLEAN_TYPE, BUTTON_TYPE, URL_TYPE, IMAGE_TYPE, BOOLEAN_TYPE (date is not yet implemented)
 editable:    wheter the field content is editable (not yet implemented)
 parameters:  Options for rendering. see later
 
@@ -103,6 +103,19 @@ MSzImageCell::HEIGHT -sets the height of the image in pixel
 MSzImageCell::WIDTH -sets the tidth of the image in pixel
 MSzImageCell::CROSSORIGIN -sets crossorigin="anonymous" parameter fro the image if it is set to true
 
+5.5) BOOLEAN_TYPE
+This cell renderer displays a bboolean value as a checkbox
+Due to limitation of the HTML framework the editable flag sets the disabled status of the element.
 
+Example:
+$tableData = array(
+	array("one" => true, "two" => false),
+	array("one" => false, "two" => true)
+);
+		
+$column1 = new MSzTableColumn("one", "Editable", MSzTableColumn::BOOLEAN_TYPE, true); //the cell is editable
+$column2 = new MSzTableColumn("two", "Not editable", MSzTableColumn::BOOLEAN_TYPE); //the cell is not editable
+$tr = new MSzTableRenderer([$column1, $column2], $tableData);
+$tr->doRendering();
 
 
