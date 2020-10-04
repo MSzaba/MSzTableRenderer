@@ -31,7 +31,7 @@ class MSzStringCell  implements MSzCell {
 		}
 	}
 
-	public static function validate($value) {
+	public function validate($value) {
 		return isset($value) && is_string($value);
 	}
 

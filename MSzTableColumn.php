@@ -41,9 +41,10 @@ class MSzTableColumn {
 		$this -> type = $type;	
 		$this -> editable = $editable;
 		$this->cellRenderer = self::createRenderer($type, $editable, $parameters);
-		if (isset($parameters)) {
-			$this->parameters = $parameters;
-		}
+		$this->parameters = $parameters ?? null;
+		//if (isset($parameters)) {
+		//	$this->parameters = $parameters;
+		//}
 	}
 
 	public function getColumnId() {
@@ -80,6 +81,7 @@ class MSzTableColumn {
 				break;
 			case self::BOOLEAN_TYPE:
 				return new MSzBooleanCell($editable, $parameters);
+
 			case self::BUTTON_TYPE:
 				# code...
 				break;

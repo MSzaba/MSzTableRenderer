@@ -89,7 +89,7 @@ class MSzTableRenderer  {
 			foreach ($this->tableHeader as $column) {
 				$id = $column->getColumnId();
 				$cellRenderer = $column->getRenderer();
-				$secondaryParameterId = $cellRenderer->getSecondaryParameterId();				
+				$secondaryParameterId = $cellRenderer->getSecondaryParameterId();
 				if ($cellRenderer->validate($row[$id])) {
 					if (isset($secondaryParameterId)) {
 						echo "<td>". $cellRenderer->render($row[$id], $row[$secondaryParameterId]) . "</td>"; 
