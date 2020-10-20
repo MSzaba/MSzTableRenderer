@@ -31,7 +31,7 @@ class MSzBooleanCell  implements MSzCell {
 				
 			}
 			$this->parameters = $parameters;
-			error_log("Parameters are set: " . print_r($this->parameters, true));
+			//error_log("Parameters are set: " . print_r($this->parameters, true));
 		}
 	}
 
@@ -52,10 +52,10 @@ class MSzBooleanCell  implements MSzCell {
 		} 
 		//echo "Value is boolean: " . is_bool($value)  . " value itself: " . $value ? "true" : "false";
 		if ($this->determinateBooleanValue($value)) {
-			error_log("render true for value " . $value);
+			//error_log("render true for value " . $value);
 			return '<input type="checkbox" checked ' . $readonly . '">';
 		} else {
-			error_log("render false for value " . $value);
+			//error_log("render false for value " . $value);
 			return '<input type="checkbox" ' . $readonly . '">';
 		}
 		
@@ -69,36 +69,36 @@ class MSzBooleanCell  implements MSzCell {
 		if (!isset($value)) {
 			return null;
 		}
-		error_log("process value: " . $value);
+		//error_log("process value: " . $value);
 		
 		
 		if (isset($this->parameters)) {
 
 			if (isset($this->parameters[self::ACCEPTED_TRUE]) ) {
-				error_log("accepted true is set");
+				//error_log("accepted true is set");
 				$listOfTrue = $this->parameters[self::ACCEPTED_TRUE];
 				
 				if (in_array($value, $listOfTrue, true)) {
-					error_log("in true array: " . $value);
+					//error_log("in true array: " . $value);
 					return true;
 				}
 				
 			} 
 			if (isset($this->parameters[self::ACCEPTED_FALSE])) {
-				error_log("accepted false is set");
+				//error_log("accepted false is set");
 				$listOfFalse = $this->parameters[self::ACCEPTED_FALSE];
 				if (in_array($value, $listOfFalse, true)) {
-					error_log("in false array: " . $value);
-					error_log("false array: " . print_r($listOfFalse, true));
+					//error_log("in false array: " . $value);
+					//error_log("false array: " . print_r($listOfFalse, true));
 					return false;
 				}
 			}
 		}
 		if (is_bool($value)) {
-			error_log("boolean: " . ($value === true ? "true" : "false"));
+			//error_log("boolean: " . ($value === true ? "true" : "false"));
 			return $value;
 		}
-		error_log("Last boolean: " . $value ? "true" : "false");
+		//error_log("Last boolean: " . $value ? "true" : "false");
 		return $value == true;
 		
 	}
