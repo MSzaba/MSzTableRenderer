@@ -7,13 +7,24 @@ class MSzTableRenderer  {
 
 	private $tableData;
 	private $tableHeader;
+	private $validStyleSources;
+	private $styleClasses;
+
+	public const ST_TABLE = "ST_TABLE";
+	public const ST_HEADER = "ST_HEADER";
+	public const ST_ROW = "ST_ROW";
+	//public const ST_FOOTER = "ST_FOOTER";
 
 
 
 	public function __construct($tableHeader, $tableData ) {
 		$this -> setTableHeader($tableHeader);	
 		$this -> setTableData($tableData);
-		
+		$this->validStyleSources = [
+			self::ST_TABLE,
+			self::ST_HEADER,
+			self::ST_ROW
+		];
 	}
 
 	public function setTableData($tableData) {
@@ -65,6 +76,50 @@ class MSzTableRenderer  {
 		$this->tableHeader = $tableHeader;
 	}
 
+	public function setStyles($stylesArray) {
+
+		if (!isset($stylesArray)) {
+			throw new Exception("Styles array is missing");
+		}
+		if (!is_array($stylesArray)) {
+			throw new Exception("Function parameter must be an array");
+		}
+		if (empty($stylesArray)) {
+			throw new Exception("Styles array is empty!");
+		}
+
+		foreach ($stylesArray as $key => $value) {
+
+			if (!isset($key) || is_numeric($key)) {
+				throw new Exception("Style array has wrong format. <<Style source>> => <<classes>> format should be used.");
+			}
+			if (!in_array($key, $this->validStyleSources)) {
+				throw new Exception("Invalid style source!");
+			}
+			
+			$internalStyles = $this->checkValidStyleset($value, "Style");
+			$this->styleClasses[$key] =  htmlspecialchars($internalStyles, ENT_QUOTES);
+		}
+	}
+
+	private function getStyle($source) {
+		if (isset($this->styleClasses[$source])) {
+			return $this->styleClasses[$source];
+		} else {
+			return "";
+		}
+		
+		
+	}
+
+	private function checkValidStyleset($string) {
+		if (!ctype_alnum($string)) {
+			throw new Exception("Style name must be alfanumerical!");
+		}
+		return $string;
+	}
+
+
 	public function doRendering() {
 		$this->renderHeader();
 		$this->renderRows();
@@ -72,8 +127,12 @@ class MSzTableRenderer  {
 	}
 
 	private function renderHeader() {
-		echo "<table>";
-		echo "<tr>";  
+
+		$tableStyle = $this->getStyle(self::ST_TABLE);
+		$tableHeaderStyle = $this->getStyle(self::ST_HEADER);
+		
+		echo '<table class="' . $tableStyle . '">';
+		echo '<tr  class="' . $tableHeaderStyle . '">';  
 		foreach ($this->tableHeader as $column) {
 			
 		  	echo '<th id="'. $column->getColumnId() . '">'.$column->getColumnTitle()."</th>" ;
@@ -83,9 +142,9 @@ class MSzTableRenderer  {
 	}
 
 	private function renderRows() {
-		
+		$rowStyle = $this->getStyle(self::ST_ROW);
 		foreach ($this->tableData as $row) {
-			echo "<tr>"; 
+			echo '<tr  class="' . $rowStyle . '">'; 
 			foreach ($this->tableHeader as $column) {
 				$id = $column->getColumnId();
 				$cellRenderer = $column->getRenderer();
