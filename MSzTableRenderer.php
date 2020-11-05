@@ -113,7 +113,8 @@ class MSzTableRenderer  {
 	}
 
 	private function checkValidStyleset($string) {
-		if (!ctype_alnum($string)) {
+		$stringToCheck = str_replace(' ', '', $string);
+		if (!ctype_alnum($stringToCheck)) {
 			throw new Exception("Style name must be alfanumerical!");
 		}
 		return $string;
