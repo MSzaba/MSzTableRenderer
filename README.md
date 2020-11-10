@@ -118,4 +118,28 @@ $column2 = new MSzTableColumn("two", "Not editable", MSzTableColumn::BOOLEAN_TYP
 $tr = new MSzTableRenderer([$column1, $column2], $tableData);
 $tr->doRendering();
 
+6) Styling
 
+The table can handle styling information. There are four different area where the styling information can be added:
+-Table (added to the <table> tag)
+-Header (added to the first <tr> tag)
+-Row (added to the following <tr> tags)
+-Column (added to the affected <th> and <td> tags)
+	
+Example:
+
+$tr = new MSzTableRenderer($tableHeader, $dataToDisplay); 
+$tr->setStyles([
+	MSzTableRenderer::ST_TABLE => "tableStyle", 
+	MSzTableRenderer::ST_HEADER => "tableHeaderStyle",
+	MSzTableRenderer::ST_ROW => "tableRowStyle",
+	"columnToHide" => "hideBelow640"
+]);
+$tr->doRendering();
+
+In the example first we create a Table Renderer instance with previously created data. Then we call the setStyles method with an array.
+For the Whole table we set the stlye "tableStyle", for the header we set "tableHeaderStyle" and for the rows we set "tableRowStlye".
+At the end we set an extra class for the column "columnToHide": "hideBelow640".
+These stlyes must be defined in the available css files!
+
+This way the table can support mobile devices and tablets. Those colums, which are not requred on the screen in lower resolution can be hidden.
