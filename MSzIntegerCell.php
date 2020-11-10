@@ -35,12 +35,13 @@ class MSzIntegerCell  implements MSzCell {
 		return isset($value) && is_integer($value);
 	}
 
-	public function render($value, $secondaryValue = NULL) {
+	public function render($value, $secondaryValue = NULL, $style = null) {
+		
 		if ($this->editable) {
-			return '<input type="text" value="' . intval($value) . '">';
+			return '<input type="text" value="' . intval($value) . '"' . $style .' >';
 		} else {
 			
-			return intval($value);
+			return '<span ' . $style . '>' . intval($value) . '</span>';
 		}
 		
 

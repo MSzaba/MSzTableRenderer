@@ -41,7 +41,7 @@ class MSzURLCell  implements MSzCell {
 		return isset($value) && is_string($value);
 	}
 
-	public function render($value, $secondaryValue  = NULL) {
+	public function render($value, $secondaryValue  = NULL, $style = null) {
 		if (!isset($secondaryValue) || strlen($secondaryValue) === 0 ||  strcmp($secondaryValue, MSzCell::NULL) == 0) {
 			throw new Exception('Invalid or missing secondary render parameter!');
 		}
@@ -49,8 +49,9 @@ class MSzURLCell  implements MSzCell {
 			
 			$retVal1 = strip_tags(stripslashes(strval($value)));
 			$retVal2 = strip_tags(stripslashes(strval($secondaryValue)));
+			$styleToEnter = $style ?? "";
 			
-				return '<a href="'.$this->parameters[self::PREFIX] . $retVal2.'" >' . $retVal1 . '</a>';
+				return '<a href="'.$this->parameters[self::PREFIX] . $retVal2.'"' . $styleToEnter .'>' . $retVal1 . '</a>';
 			
 		} else {
 			return "N/A";

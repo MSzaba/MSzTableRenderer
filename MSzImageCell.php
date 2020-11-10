@@ -63,7 +63,7 @@ class MSzImageCell  implements MSzCell {
 		return isset($value) && is_string($value);
 	}
 
-	public function render($value, $secondaryValue  = NULL) {
+	public function render($value, $secondaryValue  = NULL, $style = null) {
 		
 		if (isset($value) && strcmp($value, MSzCell::NULL) != 0 ) {
 			
@@ -76,12 +76,15 @@ class MSzImageCell  implements MSzCell {
 			if (isset($this->parameters[self::WIDTH])) {
 				$width = ' width= "'.$this->parameters[self::WIDTH].'px" ';
 			}
-			
+			$styleToPrint = "";
+			if (isset($style)) {
+				$styleToPrint = " " . $style . " ";
+			}
 			$crossorigin = '';
 			if (isset($this->parameters[self::CROSSORIGIN]) && $this->parameters[self::CROSSORIGIN]) {
 				$crossorigin = ' crossorigin="anonymous"  ';
 			}
-				return '<img src="'. $retVal .'"'. $height . $width . $crossorigin . ' >';
+				return '<img src="'. $retVal .'"'. $height . $width . $crossorigin . $styleToPrint . ' >';
 			
 		} else {
 			return "N/A";

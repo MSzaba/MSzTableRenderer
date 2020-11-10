@@ -8,7 +8,7 @@ interface MSzCell {
 
 	public function validate($value);
 	public function __construct($editable, $parameters =  null);
-	public function render($value, $secondaryValue = null);
+	public function render($value, $secondaryValue = null, $style = null);
 	public function getSecondaryParameterId();
 	
 }

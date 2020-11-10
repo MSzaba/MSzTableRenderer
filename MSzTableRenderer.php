@@ -9,6 +9,7 @@ class MSzTableRenderer  {
 	private $tableHeader;
 	private $validStyleSources;
 	private $styleClasses;
+	private $ids = [];
 
 	public const ST_TABLE = "ST_TABLE";
 	public const ST_HEADER = "ST_HEADER";
@@ -57,16 +58,17 @@ class MSzTableRenderer  {
 		if (count($tableHeader) === 0) {
 			throw new Exception('Table Headers Parameter array is empty!');
 		}
-		$ids = array();
+		$this->ids = array();
 		$titles = array();
 		foreach ($tableHeader as $value) {
 			if (!$value instanceof MSzTableColumn) {
 				throw new Exception('The Table Headers array contains invalid items!');
 			}
-			if (in_array($value->getColumnId(), $ids)) {
+			if (in_array($value->getColumnId(), $this->ids)) {
 				throw new Exception('The Table Headers id array contains duplicate items!');
 			}
-			array_push($ids, $value->getColumnId());
+			//error_log("Push to aray: " . $value->getColumnId() . " Title: " . $value->getColumnTitle());
+			array_push($this->ids, $value->getColumnId());
 			if (in_array($value->getColumnTitle(), $titles)) {
 				throw new Exception('The Table Headers title array contains duplicate items!');
 			}
@@ -93,7 +95,7 @@ class MSzTableRenderer  {
 			if (!isset($key) || is_numeric($key)) {
 				throw new Exception("Style array has wrong format. <<Style source>> => <<classes>> format should be used.");
 			}
-			if (!in_array($key, $this->validStyleSources)) {
+			if (!in_array($key, $this->validStyleSources) && !in_array($key, $this->ids)) {
 				throw new Exception("Invalid style source!");
 			}
 			
@@ -135,8 +137,13 @@ class MSzTableRenderer  {
 		echo '<table class="' . $tableStyle . '">';
 		echo '<tr  class="' . $tableHeaderStyle . '">';  
 		foreach ($this->tableHeader as $column) {
+			$id = $column->getColumnId();
+			$style = "";
+			if ($this->getStyle($id) !== null) {
+				$style = 'class="' . $this->getStyle($id) . '" ';
+			}
 			
-		  	echo '<th id="'. $column->getColumnId() . '">'.$column->getColumnTitle()."</th>" ;
+		  	echo '<th id="'. $id . '" ' . $style . '>'.$column->getColumnTitle()."</th>" ;
 		 }  
 		
   		echo "</tr>";
@@ -148,13 +155,18 @@ class MSzTableRenderer  {
 			echo '<tr  class="' . $rowStyle . '">'; 
 			foreach ($this->tableHeader as $column) {
 				$id = $column->getColumnId();
+				$styleToPrint = "";
+				if ($this->getStyle($id) !== null ) {
+					$styleToPrint = 'class="' . $this->getStyle($id) . '" ';
+					error_log("cell style: " . $styleToPrint);
+				}
 				$cellRenderer = $column->getRenderer();
 				$secondaryParameterId = $cellRenderer->getSecondaryParameterId();
 				if ($cellRenderer->validate($row[$id])) {
 					if (isset($secondaryParameterId)) {
-						echo "<td>". $cellRenderer->render($row[$id], $row[$secondaryParameterId]) . "</td>"; 
+						echo "<td " . $styleToPrint . " >". $cellRenderer->render($row[$id], $row[$secondaryParameterId], $styleToPrint) . "</td>"; 
 					} else {
-						echo "<td>". $cellRenderer->render($row[$id]) . "</td>"; 
+						echo "<td " . $styleToPrint . " >". $cellRenderer->render($row[$id], null, $styleToPrint) . "</td>"; 
 					}
 					
 					

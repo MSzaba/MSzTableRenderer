@@ -35,17 +35,18 @@ class MSzStringCell  implements MSzCell {
 		return isset($value) && is_string($value);
 	}
 
-	public function render($value, $secondaryValue = NULL) {
+	public function render($value, $secondaryValue = NULL, $style = null) {
 		
 		if (isset($value) && strcmp($value, MSzCell::NULL) != 0) {
 			if (isset($this->parameters) && isset($this->parameters[self::MAX_LENGTH]) && $this->parameters[self::MAX_LENGTH] < strlen($value)) {
 				$value = substr($value, 0, $this->parameters[self::MAX_LENGTH]);
 			}
+			$styleToEnter = $style ?? "";
 			$retVal = strip_tags(stripslashes(strval($value)));
 			if ($this->editable) {
-				return '<input type="text" value="' . $retVal . '">';
+				return '<input type="text" value="' . $retVal . '"' . $styleToEnter .'>';
 			} else {
-				return $retVal;
+				return '<span ' . $styleToEnter . '>' . $retVal . '</span>';
 			}
 		} else {
 			return "N/A";

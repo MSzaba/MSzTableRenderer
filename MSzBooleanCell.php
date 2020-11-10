@@ -45,18 +45,19 @@ class MSzBooleanCell  implements MSzCell {
 		return true;
 	}
 
-	public function render($value, $secondaryValue = NULL) {
+	public function render($value, $secondaryValue = NULL, $style = null) {
 		$readonly = "";
 		if (!$this->editable) {
 			$readonly = " disabled ";
 		} 
+		$style = $style ?? "";
 		//echo "Value is boolean: " . is_bool($value)  . " value itself: " . $value ? "true" : "false";
 		if ($this->determinateBooleanValue($value)) {
 			//error_log("render true for value " . $value);
-			return '<input type="checkbox" checked ' . $readonly . '">';
+			return '<input type="checkbox" checked ' . $readonly . '" ' . $style . '>';
 		} else {
 			//error_log("render false for value " . $value);
-			return '<input type="checkbox" ' . $readonly . '">';
+			return '<input type="checkbox" ' . $readonly . '" ' . $style . '>';
 		}
 		
 
