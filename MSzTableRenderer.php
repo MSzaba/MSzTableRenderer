@@ -158,7 +158,7 @@ class MSzTableRenderer  {
 				$styleToPrint = "";
 				if ($this->getStyle($id) !== null ) {
 					$styleToPrint = 'class="' . $this->getStyle($id) . '" ';
-					error_log("cell style: " . $styleToPrint);
+					//error_log("cell style: " . $styleToPrint);
 				}
 				$cellRenderer = $column->getRenderer();
 				$secondaryParameterId = $cellRenderer->getSecondaryParameterId();
