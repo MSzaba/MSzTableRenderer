@@ -155,15 +155,23 @@ class MSzTableRenderer  {
 			echo '<tr  class="' . $rowStyle . '">'; 
 			foreach ($this->tableHeader as $column) {
 				$id = $column->getColumnId();
+
 				$styleToPrint = "";
 				if ($this->getStyle($id) !== null ) {
 					$styleToPrint = 'class="' . $this->getStyle($id) . '" ';
-					//error_log("cell style: " . $styleToPrint);
 				}
 				$cellRenderer = $column->getRenderer();
 				$secondaryParameterId = $cellRenderer->getSecondaryParameterId();
 				if ($cellRenderer->validate($row[$id])) {
+					if (!isset($row[$id])  || strlen($row[$id]) == 0) {
+						error_log("MSzTableRenderer::renderRows | data is missing from table column " . $id);
+						continue;
+					}
 					if (isset($secondaryParameterId)) {
+						if (!isset($row[$secondaryParameterId]) || strlen($row[$secondaryParameterId]) == 0) {
+						error_log("MSzTableRenderer::renderRows | data is missing from table column " . $id);
+						continue;
+					}
 						echo "<td " . $styleToPrint . " >". $cellRenderer->render($row[$id], $row[$secondaryParameterId], $styleToPrint) . "</td>"; 
 					} else {
 						echo "<td " . $styleToPrint . " >". $cellRenderer->render($row[$id], null, $styleToPrint) . "</td>"; 
