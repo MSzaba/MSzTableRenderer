@@ -9,6 +9,7 @@ class MSzTableRenderer  {
 	private $tableHeader;
 	private $validStyleSources;
 	private $styleClasses;
+	private $caption;
 	private $ids = [];
 
 	public const ST_TABLE = "ST_TABLE";
@@ -18,9 +19,12 @@ class MSzTableRenderer  {
 
 
 
-	public function __construct($tableHeader, $tableData ) {
+	public function __construct($tableHeader, $tableData, $caption = null ) {
 		$this -> setTableHeader($tableHeader);	
 		$this -> setTableData($tableData);
+		if (isset($caption)) {
+			$this->caption = htmlspecialchars($caption);
+		}
 		$this->validStyleSources = [
 			self::ST_TABLE,
 			self::ST_HEADER,
@@ -135,6 +139,7 @@ class MSzTableRenderer  {
 		$tableHeaderStyle = $this->getStyle(self::ST_HEADER);
 		
 		echo '<table class="' . $tableStyle . '">';
+		$this->renderCaption();
 		echo '<tr  class="' . $tableHeaderStyle . '">';  
 		foreach ($this->tableHeader as $column) {
 			$id = $column->getColumnId();
@@ -147,6 +152,12 @@ class MSzTableRenderer  {
 		 }  
 		
   		echo "</tr>";
+	}
+
+	private function renderCaption() {
+		if (isset($this->caption)) {
+			echo "<caption>". $this->caption . "</caption>";
+		}
 	}
 
 	private function renderRows() {
@@ -165,13 +176,15 @@ class MSzTableRenderer  {
 				if ($cellRenderer->validate($row[$id])) {
 					if (!isset($row[$id])  || strlen($row[$id]) == 0) {
 						error_log("MSzTableRenderer::renderRows | data is missing from table column " . $id);
+						echo "<td " . $styleToPrint . " >";
 						continue;
 					}
 					if (isset($secondaryParameterId)) {
 						if (!isset($row[$secondaryParameterId]) || strlen($row[$secondaryParameterId]) == 0) {
-						error_log("MSzTableRenderer::renderRows | data is missing from table column " . $id);
-						continue;
-					}
+							error_log("MSzTableRenderer::renderRows | secondary data is missing from table column " . $id);
+							echo "<td " . $styleToPrint . " >";
+							continue;
+						}
 						echo "<td " . $styleToPrint . " >". $cellRenderer->render($row[$id], $row[$secondaryParameterId], $styleToPrint) . "</td>"; 
 					} else {
 						echo "<td " . $styleToPrint . " >". $cellRenderer->render($row[$id], null, $styleToPrint) . "</td>"; 
