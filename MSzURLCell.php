@@ -18,7 +18,7 @@ class MSzURLCell  implements MSzCell {
 			}
 			foreach ($parameters as $parameterName => $value) {
 				if (!in_array($parameterName, self::$availableParameterList)) {
-					throw new Exception('Invalid Column parameter!');
+					throw new Exception('MSzURLCell Invalid Column parameter: ' . $parameterName);
 				}
 			}
 			if (!array_key_exists (self::PREFIX, $parameters)) {

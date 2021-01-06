@@ -21,7 +21,7 @@ class MSzImageCell  implements MSzCell {
 			}
 			foreach ($parameters as $parameterName => $value) {
 				if (!in_array($parameterName, self::$availableParameterList)) {
-					throw new Exception('Invalid Column parameter!');
+					throw new Exception('MSzImageCell Invalid Column parameter: ' . $parameterName);
 				}
 				if (strcmp($parameterName, self::HEIGHT) === 0) {
 					if (!isset($value)) {

@@ -26,7 +26,7 @@ class MSzBooleanCell  implements MSzCell {
 			}
 			foreach ($parameters as $parameterName => $value) {
 				if (!in_array($parameterName, self::$availableParameterList)) {
-					throw new Exception('Invalid Column parameter!');
+					throw new Exception('MSzBooleanCell Invalid Column parameter: ' . $parameterName);
 				}
 				
 			}
