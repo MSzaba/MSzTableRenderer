@@ -5,10 +5,11 @@ if (!defined("__ALLOW_INCLUDE__")) {
 require_once(__DIR__ . "/MSzCell.php");
 class MSzStringCell  implements MSzCell {
 	public const MAX_LENGTH = "ML";
+	public const ENABLE_TITLE = "ET";
 
 	private $editable;
 	private $parameters;
-	private static $availableParameterList = [self::MAX_LENGTH];
+	private static $availableParameterList = [self::MAX_LENGTH, self::ENABLE_TITLE];
 
 	public function __construct($editable, $parameters = null) {
 		if (!isset($editable)) {
@@ -24,7 +25,7 @@ class MSzStringCell  implements MSzCell {
 			}
 			foreach ($parameters as $parameterName => $value) {
 				if (!in_array($parameterName, self::$availableParameterList)) {
-					throw new Exception('Invalid Column parameter!');
+					throw new Exception('MSzStringCell Invalid Column parameter: ' . $parameterName);
 				}
 			}
 			$this->parameters = $parameters;
@@ -38,15 +39,21 @@ class MSzStringCell  implements MSzCell {
 	public function render($value, $secondaryValue = NULL, $style = null) {
 		
 		if (isset($value) && strcmp($value, MSzCell::NULL) != 0) {
+			$value = strip_tags(stripslashes(strval($value)));
 			if (isset($this->parameters) && isset($this->parameters[self::MAX_LENGTH]) && $this->parameters[self::MAX_LENGTH] < strlen($value)) {
-				$value = substr($value, 0, $this->parameters[self::MAX_LENGTH]);
+				$retVal = substr($value, 0, $this->parameters[self::MAX_LENGTH]);
+			} else {
+				$retVal = $value;
 			}
 			$styleToEnter = $style ?? "";
-			$retVal = strip_tags(stripslashes(strval($value)));
+			$title = "";
+			if (isset($this->parameters) && isset($this->parameters[self::ENABLE_TITLE]) && $this->parameters[self::ENABLE_TITLE] == true) {
+				$title = ' title="' . $value . '" ';
+			}
 			if ($this->editable) {
-				return '<input type="text" value="' . $retVal . '"' . $styleToEnter .'>';
+				return '<input type="text" value="' . $retVal . '"' . $styleToEnter . $title . '>';
 			} else {
-				return '<span ' . $styleToEnter . '>' . $retVal . '</span>';
+				return '<span ' . $styleToEnter .  $title . '>' . $retVal . '</span>';
 			}
 		} else {
 			return "N/A";
