@@ -17,40 +17,40 @@ class MSzImageCell  implements MSzCell {
 
 		if (isset($parameters)) {
 			if (!is_array($parameters)) {
-				throw new Exception('Column parameters must be an array!');
+				throw new Exception('MSzImageCell | Column parameters must be an array!');
 			}
 			foreach ($parameters as $parameterName => $value) {
 				if (!in_array($parameterName, self::$availableParameterList)) {
-					throw new Exception('MSzImageCell Invalid Column parameter: ' . $parameterName);
+					throw new Exception('MSzImageCell | Invalid Column parameter: ' . $parameterName);
 				}
 				if (strcmp($parameterName, self::HEIGHT) === 0) {
 					if (!isset($value)) {
-						throw new Exception('HEIGHT parameter is set, vut the value is empty!');
+						throw new Exception('MSzImageCell | HEIGHT parameter is set, vut the value is empty!');
 					}
 					if (!is_integer($value)) {
-						throw new Exception('Invalid HEIGHT parameter type!');
+						throw new Exception('MSzImageCell | Invalid HEIGHT parameter type!');
 					}
 					if ($value <= 0) {
-						throw new Exception('To small HEIGHT parameter!');
+						throw new Exception('MSzImageCell | To small HEIGHT parameter!');
 					}
 				}
 				if (strcmp($parameterName, self::WIDTH) === 0) {
 					if (!isset($value)) {
-						throw new Exception('WIDTH parameter is set, vut the value is empty!');
+						throw new Exception('MSzImageCell | WIDTH parameter is set, vut the value is empty!');
 					}
 					if (!is_integer($value)) {
-						throw new Exception('Invalid WIDTH parameter type!');
+						throw new Exception('MSzImageCell | Invalid WIDTH parameter type!');
 					}
 					if ($value <= 0) {
-						throw new Exception('To small WIDTH parameter!');
+						throw new Exception('MSzImageCell | To small WIDTH parameter!');
 					}
 				}
 				if (strcmp($parameterName, self::CROSSORIGIN) === 0) {
 					if (!isset($value)) {
-						throw new Exception('CROSSORIGIN parameter is set, vut the value is empty!');
+						throw new Exception('MSzImageCell | CROSSORIGIN parameter is set, vut the value is empty!');
 					}
 					if (!is_bool($value)) {
-						throw new Exception('Invalid CROSSORIGIN parameter type!');
+						throw new Exception('MSzImageCell | Invalid CROSSORIGIN parameter type!');
 					}
 				}
 			}

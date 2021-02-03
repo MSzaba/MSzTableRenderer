@@ -13,19 +13,19 @@ class MSzStringCell  implements MSzCell {
 
 	public function __construct($editable, $parameters = null) {
 		if (!isset($editable)) {
-			throw new Exception('Editable parameter is not set!');
+			throw new Exception('MSzStringCell | Editable parameter is not set!');
 		}
 		if (!is_bool($editable)) {
-			throw new Exception('Editable parameter is not a boolean!');
+			throw new Exception('MSzStringCell | Editable parameter is not a boolean!');
 		}
 		$this->editable = $editable;
 		if (isset($parameters)) {
 			if (!is_array($parameters)) {
-				throw new Exception('Column parameters must be an array!');
+				throw new Exception('MSzStringCell | Column parameters must be an array!');
 			}
 			foreach ($parameters as $parameterName => $value) {
 				if (!in_array($parameterName, self::$availableParameterList)) {
-					throw new Exception('MSzStringCell Invalid Column parameter: ' . $parameterName);
+					throw new Exception('MSzStringCell | Invalid Column parameter: ' . $parameterName);
 				}
 			}
 			$this->parameters = $parameters;

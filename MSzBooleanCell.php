@@ -13,20 +13,20 @@ class MSzBooleanCell  implements MSzCell {
 
 	public function __construct($editable, $parameters = null) {
 		if (!isset($editable)) {
-			throw new Exception('Editable parameter is not set!');
+			throw new Exception('MSzBooleanCell | Editable parameter is not set!');
 		}
 		if (!is_bool($editable)) {
-			throw new Exception('Editable parameter is not a boolean!');
+			throw new Exception('MSzBooleanCell | Editable parameter is not a boolean!');
 		}
 		$this->editable = $editable;
 		
 		if (isset($parameters)) {
 			if (!is_array($parameters)) {
-				throw new Exception('Column parameters must be an array!');
+				throw new Exception('MSzBooleanCell | Column parameters must be an array!');
 			}
 			foreach ($parameters as $parameterName => $value) {
 				if (!in_array($parameterName, self::$availableParameterList)) {
-					throw new Exception('MSzBooleanCell Invalid Column parameter: ' . $parameterName);
+					throw new Exception('MSzBooleanCell | Invalid Column parameter: ' . $parameterName);
 				}
 				
 			}

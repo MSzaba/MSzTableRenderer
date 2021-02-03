@@ -14,26 +14,26 @@ class MSzURLCell  implements MSzCell {
 
 		if (isset($parameters)) {
 			if (!is_array($parameters)) {
-				throw new Exception('Column parameters must be an array!');
+				throw new Exception('MSzURLCell | Column parameters must be an array!');
 			}
 			foreach ($parameters as $parameterName => $value) {
 				if (!in_array($parameterName, self::$availableParameterList)) {
-					throw new Exception('MSzURLCell Invalid Column parameter: ' . $parameterName);
+					throw new Exception('MSzURLCell | Invalid Column parameter: ' . $parameterName);
 				}
 			}
 			if (!array_key_exists (self::PREFIX, $parameters)) {
-				throw new Exception('PREFIX parameter is not set!');
+				throw new Exception('MSzURLCell | PREFIX parameter is not set!');
 			}
 			
 			if (filter_var($parameters[self::PREFIX], FILTER_VALIDATE_URL) === FALSE) {
-				throw new Exception('PREFIX parameter is not an URL!');
+				throw new Exception('MSzURLCell | PREFIX parameter is not an URL!');
 			}
 			if (!array_key_exists (MSzCell::SECONDARY_PARAMETER, $parameters)) {
-				throw new Exception('SECONDARY_PARAMETER parameter is not set!');
+				throw new Exception('MSzURLCell | SECONDARY_PARAMETER parameter is not set!');
 			}
 			$this->parameters = $parameters;
 		} else {
-			throw new Exception('Parameters are not set!');
+			throw new Exception('MSzURLCell | Parameters are not set!');
 		}
 	}
 
