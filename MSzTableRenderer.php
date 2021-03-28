@@ -179,9 +179,9 @@ class MSzTableRenderer  {
 						echo "<td " . $styleToPrint . " >";
 						continue;
 					}
-					if (isset($secondaryParameterId)) {
+					if ($secondaryParameterId) {
 						if (!isset($row[$secondaryParameterId]) || strlen($row[$secondaryParameterId]) == 0) {
-							error_log("MSzTableRenderer::renderRows | secondary data is missing from table column " . $id);
+							error_log("MSzTableRenderer::renderRows | secondary data is missing from table column " . $id . " seconmdary parameter id: " . print_r($secondaryParameterId, true ));
 							echo "<td " . $styleToPrint . " >";
 							continue;
 						}
@@ -192,6 +192,7 @@ class MSzTableRenderer  {
 					
 					
 				} else {
+					error_log("MSzTableRenderer.renderRows | Invalid data:"  . $row[$id]);
 					echo "<td>Invalid data: " . $row[$id] . "</td>";
 				}
 				
