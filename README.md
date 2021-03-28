@@ -96,6 +96,25 @@ $column1 = new MSzTableColumn("linkText", "Sport Articles", MSzTableColumn::URL_
 $tr = new MSzTableRenderer([$column1], $tableData);
 $tr->doRendering();
 
+
+
+If the URL is not row dependent, and there is no need to parametrize that on row level a fix URL also can be used.
+Example:
+
+$tableData = array(
+	array("unredSportArticles" => "38", "unreadCelebriyArticles" => "7", "unreadPoliticsArticles" => "55")
+	
+);
+$parameterSport = [MSzURLCell::FIX_URL => "https://www.bbc.com/sport/"
+];
+$parameterCeleb = [MSzURLCell::FIX_URL => "https://www.bbc.com/celebs/"
+];
+$parameterPolitics = [MSzURLCell::FIX_URL => "https://www.bbc.com/politics/"
+];
+$column1 = new MSzTableColumn("unredSportArticles", "Unread Sport Articles", MSzTableColumn::URL_TYPE, false, $parameterSport);
+$column2 = new MSzTableColumn("unreadCelebriyArticles", "Unread Celebrity Articles", MSzTableColumn::URL_TYPE, false, $parameterCeleb);
+$column3 = new MSzTableColumn("unreadPoliticsArticles", "Unread Politics Articles", MSzTableColumn::URL_TYPE, false, $parameterPolitics);
+
 5.4) IMAGE_TYPE
 This cell renderer can show an image in a cell.
 It has 3 parameters:
