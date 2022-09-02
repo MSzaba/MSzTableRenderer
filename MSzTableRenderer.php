@@ -175,13 +175,13 @@ class MSzTableRenderer  {
 				$secondaryParameterId = $cellRenderer->getSecondaryParameterId();
 				if ($cellRenderer->validate($row[$id])) {
 					if (!isset($row[$id])  || strlen($row[$id]) == 0) {
-						error_log("MSzTableRenderer::renderRows | data is missing from table column " . $id);
+						error_log("MSzTableRenderer::renderRows |ERROR| data is missing from table column " . $id);
 						echo "<td " . $styleToPrint . " >";
 						continue;
 					}
 					if ($secondaryParameterId) {
 						if (!isset($row[$secondaryParameterId]) || strlen($row[$secondaryParameterId]) == 0) {
-							error_log("MSzTableRenderer::renderRows | secondary data is missing from table column " . $id . " seconmdary parameter id: " . print_r($secondaryParameterId, true ));
+							error_log("MSzTableRenderer::renderRows |ERROR| secondary data is missing from table column " . $id . " seconmdary parameter id: " . print_r($secondaryParameterId, true ));
 							echo "<td " . $styleToPrint . " >";
 							continue;
 						}
@@ -192,8 +192,8 @@ class MSzTableRenderer  {
 					
 					
 				} else {
-					error_log("MSzTableRenderer.renderRows | Invalid data:"  . $row[$id]);
-					echo "<td>Invalid data: " . $row[$id] . "</td>";
+					error_log("MSzTableRenderer.renderRows |ERROR| Invalid data:"  . print_r($row[$id], true));
+					echo "<td>Invalid data: " . print_r($row[$id], true) . "</td>";
 				}
 				
 				
