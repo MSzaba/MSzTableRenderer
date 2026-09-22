@@ -11,6 +11,7 @@ class MSzTableRenderer  {
 	private $styleClasses;
 	private $caption;
 	private $ids = [];
+	private $tableId;
 
 	public const ST_TABLE = "ST_TABLE";
 	public const ST_HEADER = "ST_HEADER";
@@ -20,6 +21,7 @@ class MSzTableRenderer  {
 
 
 	public function __construct($tableHeader, $tableData, $caption = null ) {
+		$this->tableId = uniqid('mszTable_', false);
 		$this -> setTableHeader($tableHeader);	
 		$this -> setTableData($tableData);
 		if (isset($caption)) {
@@ -133,25 +135,47 @@ class MSzTableRenderer  {
 		$this->renderFooter();
 	}
 
-	private function renderHeader() {
+	private function hasFilteringColumns(): bool {
+		foreach ($this->tableHeader as $column) {
+			if ($column->isFilteringEnabled()) return true;
+		}
+		return false;
+	}
 
+	private function renderHeader() {
 		$tableStyle = $this->getStyle(self::ST_TABLE);
 		$tableHeaderStyle = $this->getStyle(self::ST_HEADER);
-		
-		echo '<table class="' . $tableStyle . '">';
+		$tableId = htmlspecialchars($this->tableId);
+
+		echo '<table id="' . $tableId . '" class="' . $tableStyle . '">';
 		$this->renderCaption();
-		echo '<tr  class="' . $tableHeaderStyle . '">';  
+		echo '<thead>';
+		echo '<tr class="' . $tableHeaderStyle . '">';
 		foreach ($this->tableHeader as $column) {
 			$id = $column->getColumnId();
 			$style = "";
 			if ($this->getStyle($id) !== null) {
 				$style = 'class="' . $this->getStyle($id) . '" ';
 			}
-			
-		  	echo '<th id="'. $id . '" ' . $style . '>'.$column->getColumnTitle()."</th>" ;
-		 }  
-		
-  		echo "</tr>";
+			echo '<th id="' . $id . '" ' . $style . '>' . $column->getColumnTitle() . "</th>";
+		}
+		echo "</tr>";
+
+		if ($this->hasFilteringColumns()) {
+			echo '<tr class="mszFilterRow">';
+			$colIndex = 0;
+			foreach ($this->tableHeader as $column) {
+				if ($column->isFilteringEnabled()) {
+					echo '<th><input type="text" class="mszColumnFilter" data-col-index="' . $colIndex . '" oninput="mszTableFilter(\'' . $tableId . '\')" placeholder="&#128269;"></th>';
+				} else {
+					echo '<th></th>';
+				}
+				$colIndex++;
+			}
+			echo '</tr>';
+		}
+
+		echo '</thead>';
 	}
 
 	private function renderCaption() {
@@ -162,6 +186,7 @@ class MSzTableRenderer  {
 
 	private function renderRows() {
 		$rowStyle = $this->getStyle(self::ST_ROW);
+		echo '<tbody>';
 		foreach ($this->tableData as $row) {
 			echo '<tr  class="' . $rowStyle . '">'; 
 			foreach ($this->tableHeader as $column) {
@@ -200,13 +225,18 @@ class MSzTableRenderer  {
 			}
 			echo "</tr>";
 		}
-		
-		
-		
+		echo '</tbody>';
 	}
 
 	private function renderFooter() {
 		echo "</table>";
+		if ($this->hasFilteringColumns()) {
+			static $jsIncluded = false;
+			if (!$jsIncluded) {
+				echo '<script src="/tools/widgets/TableRenderer/MSzTableRenderer.js"></script>';
+				$jsIncluded = true;
+			}
+		}
 	}
 }
 ?>

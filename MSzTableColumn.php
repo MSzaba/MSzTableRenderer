@@ -16,12 +16,14 @@ class MSzTableColumn {
 	const BUTTON_TYPE = "BUTTON";
 	const URL_TYPE = "URL";
 	const IMAGE_TYPE = "IMG";
-	private $columnId; 
+	const ENABLE_FILTERING = "ENABLE_FILTERING";
+	private $columnId;
 	private $columnTitle;
 	private $type;
 	private $editable;
 	private $cellRenderer;
 	private $parameters;
+	private $filteringEnabled;
 
 	public function __construct($columnId, $columnTitle, $type, $editable = false, $parameters = null) {
 		if (!isset($columnId)) {
@@ -36,12 +38,21 @@ class MSzTableColumn {
 		if (!in_array($type, $this->getValidTypes())) {
 			throw new Exception('Column type is invalid:' . $type);
 		}
-		$this -> columnId = $columnId;
-		$this -> columnTitle = $columnTitle;
-		$this -> type = $type;	
-		$this -> editable = $editable;
-		$this->cellRenderer = self::createRenderer($type, $editable, $parameters);
-		$this->parameters = $parameters ?? null;
+		$this->columnId = $columnId;
+		$this->columnTitle = $columnTitle;
+		$this->type = $type;
+		$this->editable = $editable;
+
+		$this->filteringEnabled = isset($parameters[self::ENABLE_FILTERING]) && $parameters[self::ENABLE_FILTERING] === true;
+		$rendererParams = $parameters;
+		if (isset($rendererParams)) {
+			unset($rendererParams[self::ENABLE_FILTERING]);
+			if (empty($rendererParams)) {
+				$rendererParams = null;
+			}
+		}
+		$this->cellRenderer = self::createRenderer($type, $editable, $rendererParams);
+		$this->parameters = $rendererParams;
 		//if (isset($parameters)) {
 		//	$this->parameters = $parameters;
 		//}
@@ -66,6 +77,10 @@ class MSzTableColumn {
 
 	public function getRenderer() {
 		return $this->cellRenderer;
+	}
+
+	public function isFilteringEnabled(): bool {
+		return $this->filteringEnabled;
 	}
 
 	private static function createRenderer($type, $editable, $parameters = null) {
