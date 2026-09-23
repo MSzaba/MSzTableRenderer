@@ -12,6 +12,7 @@ class MSzTableRenderer  {
 	private $caption;
 	private $ids = [];
 	private $tableId;
+	private $maxDisplayRows = null;
 
 	public const ST_TABLE = "ST_TABLE";
 	public const ST_HEADER = "ST_HEADER";
@@ -20,12 +21,18 @@ class MSzTableRenderer  {
 
 
 
-	public function __construct($tableHeader, $tableData, $caption = null ) {
+	public function __construct($tableHeader, $tableData, $caption = null, $maxDisplayRows = null) {
 		$this->tableId = uniqid('mszTable_', false);
-		$this -> setTableHeader($tableHeader);	
-		$this -> setTableData($tableData);
+		$this->setTableHeader($tableHeader);
+		$this->setTableData($tableData);
 		if (isset($caption)) {
 			$this->caption = htmlspecialchars($caption);
+		}
+		if ($maxDisplayRows !== null) {
+			if (!is_int($maxDisplayRows) || $maxDisplayRows < 1) {
+				throw new Exception('MSzTableRenderer: maxDisplayRows must be a positive integer');
+			}
+			$this->maxDisplayRows = $maxDisplayRows;
 		}
 		$this->validStyleSources = [
 			self::ST_TABLE,
@@ -145,9 +152,11 @@ class MSzTableRenderer  {
 	private function renderHeader() {
 		$tableStyle = $this->getStyle(self::ST_TABLE);
 		$tableHeaderStyle = $this->getStyle(self::ST_HEADER);
-		$tableId = htmlspecialchars($this->tableId);
 
-		echo '<table id="' . $tableId . '" class="' . $tableStyle . '">';
+		if ($this->maxDisplayRows !== null) {
+			echo '<div class="mszTableScroll" data-max-rows="' . (int)$this->maxDisplayRows . '">';
+		}
+		echo '<table id="' . htmlspecialchars($this->tableId) . '" class="' . $tableStyle . '">';
 		$this->renderCaption();
 		echo '<thead>';
 		echo '<tr class="' . $tableHeaderStyle . '">';
@@ -166,7 +175,7 @@ class MSzTableRenderer  {
 			$colIndex = 0;
 			foreach ($this->tableHeader as $column) {
 				if ($column->isFilteringEnabled()) {
-					echo '<th><input type="text" class="mszColumnFilter" data-col-index="' . $colIndex . '" oninput="mszTableFilter(\'' . $tableId . '\')" placeholder="&#128269;"></th>';
+					echo '<th><input type="text" class="mszColumnFilter" data-col-index="' . $colIndex . '" placeholder="&#128269;"></th>';
 				} else {
 					echo '<th></th>';
 				}
@@ -230,7 +239,10 @@ class MSzTableRenderer  {
 
 	private function renderFooter() {
 		echo "</table>";
-		if ($this->hasFilteringColumns()) {
+		if ($this->maxDisplayRows !== null) {
+			echo '</div>';
+		}
+		if ($this->hasFilteringColumns() || $this->maxDisplayRows !== null) {
 			static $jsIncluded = false;
 			if (!$jsIncluded) {
 				echo '<script src="/tools/widgets/TableRenderer/MSzTableRenderer.js"></script>';
